@@ -1,17 +1,19 @@
-# TP n°2 - Qualité des Données OpenFoodFacts
+# Projet Final - Qualité des Données - EPSI
 
-Projet d'analyse et d'amélioration de la qualité des données OpenFoodFacts pour une application mobile d'aide au choix alimentaire.
+Infrastructure Docker pour le projet final de qualité des données (groupe 4-5 personnes).
 
-## 📋 Structure du projet
+## Structure du projet
 
 ```
 data_quality/
 ├── data/                    # Données brutes et traitées
-│   └── food_sample.parquet  # Dataset à analyser (à ajouter)
+│   └── dataset.csv          # Dataset à analyser (à ajouter)
 ├── notebooks/               # Notebooks Jupyter pour l'analyse
-│   └── tp_qualite_donnees.ipynb
+│   └── projet_qualite_donnees.ipynb    # Notebook principal
 ├── src/                     # Code source Python réutilisable
-│   └── __init__.py
+│   ├── __init__.py
+│   ├── data_cleaning.py
+│   └── quality_validation.py
 ├── tests/                   # Tests unitaires (pytest)
 ├── Dockerfile              # Configuration Docker
 ├── docker-compose.yml      # Orchestration Docker
@@ -19,7 +21,7 @@ data_quality/
 └── README.md              # Ce fichier
 ```
 
-## 🚀 Démarrage rapide avec Docker
+## Démarrage rapide avec Docker
 
 ### Prérequis
 
@@ -33,7 +35,10 @@ data_quality/
    cd /Users/lucassteichen/Dev/epsi/data_quality
    ```
 
-2. **Placer le fichier `food_sample.parquet` dans le dossier `data/`**
+2. **Placer votre dataset dans le dossier `data/`**
+   ```bash
+   # Exemple : dataset.csv, dataset.parquet, etc.
+   ```
 
 3. **Construire et lancer le conteneur Docker**
    ```bash
@@ -58,7 +63,7 @@ docker-compose build
 
 **Exécuter un notebook en ligne de commande :**
 ```bash
-docker-compose exec jupyter jupyter nbconvert --to notebook --execute notebooks/tp_qualite_donnees.ipynb
+docker-compose exec jupyter jupyter nbconvert --to notebook --execute notebooks/projet_qualite_donnees.ipynb
 ```
 
 **Accéder au shell du conteneur :**
@@ -71,55 +76,68 @@ docker-compose exec jupyter bash
 docker-compose exec jupyter pytest tests/
 ```
 
-## 📊 Contenu du TP
+## Objectif du projet
 
-### 1. Profiling et exploration
-- Chargement du dataset `food_sample.parquet`
-- Exploration du schéma et statistiques de base
-- Identification des variables utiles
-- Création du dictionnaire de données
+Appliquer une démarche complète de qualité des données sur un dataset de votre choix dans un contexte réaliste.
 
-### 2. Audit de la qualité avec Great Expectations
-- Initialisation de Great Expectations
-- Création d'une suite de règles (minimum 8 expectations) :
-  - Complétude (2+)
-  - Unicité (1+)
-  - Validité (2+)
-  - Conformité (2+)
-  - Cohérence (1+)
-- Calcul des taux de conformité
+### Attendus
+- Définir un **contexte métier** et une **problématique claire**
+- Réaliser un **profiling** et identifier les problèmes de qualité
+- Définir des **règles de qualité** avec des seuils mesurables
+- Implémenter les **traitements** (correction, exclusion, enrichissement)
+- Mettre en place un **monitoring** de la qualité avec indicateurs
+- Conclure par une **réponse claire** à la problématique
 
-### 3. Traitement des données
-- Mise à plat des données (types basiques)
-- Une ligne = un produit unique
-- Séparation des informations composées
-- Production du dataset `df_clean`
+### Livrables
+- **Présentation** : slides synthétiques
+- **Notebook/code** : analyse complète et documentée → [projet_qualite_donnees.ipynb](notebooks/projet_qualite_donnees.ipynb)
+- **Données préparées** : dataset nettoyé + métadonnées
+- **Reproductibilité** : environnement Docker (déjà configuré !)
 
-### 4. Valeurs aberrantes et logique métier
-- Analyse des produits : 00457521, 00000131, 3760225200056
-- Identification et traitement des anomalies
-- Règles de détection et décisions métier
+### Organisation
+- **Groupe** : 4-5 personnes
+- **Sujet** : libre (pas OpenFoodFacts)
+- **Dataset** : au choix (voir suggestions ci-dessous)
 
-### 5. Monitoring
-- Sélection de 2-3 indicateurs clés
-- Définition de seuils d'alerte
-- Identification des risques métier
+## Suggestions de datasets
 
-## 📦 Éléments obligatoires
+Choisissez un dataset avec des problèmes de qualité réels :
 
-- ✅ Environnement Python isolé (Docker au lieu de venv)
-- ✅ Fichier `requirements.txt`
-- ✅ Fichier `README.md`
-- ✅ Structuration du projet (src/ data/ ...)
+**Santé :**
+- Vaccinations COVID, hospitalisations
 
-## 🎁 Éléments bonus valorisés
+**Transport :**
+- Accidents routiers, Vélib/vélos partagés
 
-- ⬜ Versionnement avec git (commits réguliers)
-- ⬜ Tests automatisés (pytest)
-- ⬜ Journalisation des traitements (logging)
-- ⬜ Justification des décisions de traitement
+**Immobilier :**
+- DVF (ventes immobilières), Airbnb
 
-## 🛠️ Technologies utilisées
+**Environnement :**
+- Qualité de l'air, stations météo
+
+**Finance :**
+- Transactions, crypto-monnaies
+
+**Autres :**
+- Données publiques (data.gouv.fr)
+- Kaggle datasets
+- APIs ouvertes (Twitter, GitHub, etc.)
+
+## Éléments du projet
+
+### Obligatoires
+- Environnement Python isolé (Docker)
+- Fichier `requirements.txt`
+- Fichier `README.md`
+- Structuration du projet (src/ data/ ...)
+
+### Bonus valorisés
+- Versionnement avec git (commits réguliers)
+- Tests automatisés (pytest)
+- Journalisation des traitements (logging)
+- Justification des décisions de traitement
+
+## Technologies utilisées
 
 - **Python 3.11**
 - **Pandas** : manipulation de données
@@ -129,16 +147,16 @@ docker-compose exec jupyter pytest tests/
 - **Pytest** : tests unitaires
 - **Docker** : conteneurisation
 
-## 📝 Notes
+## Notes
 
 - Le projet est complètement isolé dans Docker, aucune installation locale de Python n'est requise
 - Les modifications des notebooks et du code sont automatiquement synchronisées grâce aux volumes Docker
 - Pour un environnement de production, il faudrait sécuriser l'accès à Jupyter Lab avec un token
 
-## 👤 Auteur
+## Auteur
 
 Lucas Steichen - EPSI
 
-## 📅 Date
+## Date
 
 Janvier 2026

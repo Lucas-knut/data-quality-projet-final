@@ -2,6 +2,9 @@
 pandas>=2.0.0
 numpy>=1.24.0
 pyarrow>=12.0.0  # Pour lire les fichiers Parquet
+requests>=2.31.0  # Pour télécharger les données via API
+xlrd>=2.0.1  # Pour lire les fichiers Excel .xls
+openpyxl>=3.0.0  # Pour lire les fichiers Excel .xlsx
 
 # Data Quality
 great-expectations>=0.18.0

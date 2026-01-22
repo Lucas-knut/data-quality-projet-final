@@ -1,6 +1,0 @@
-# Placeholder pour indiquer que le fichier food_sample.parquet doit être placé ici
-# Ce dossier est destiné à contenir les données du TP
-
-# Fichiers attendus :
-# - food_sample.parquet (fichier source du TP)
-# - food_sample_clean.parquet (fichier généré après nettoyage)
