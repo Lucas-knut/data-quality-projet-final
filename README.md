@@ -19,13 +19,14 @@ Ce projet applique une démarche complète de qualité des données sur les mesu
 ```
 data_quality/
 ├── data/
-│   ├── FR_E2_2025-01-01.csv                    # Mesures de qualité de l'air
+│   ├── FR_E2_2025-01-01.csv                    # Mesures jour 1
+│   ├── FR_E2_2025-01-02.csv                    # Mesures jour 2
+│   ├── FR_E2_2025-01-03.csv                    # Mesures jour 3
+│   ├── FR_E2_2025-01-04.csv                    # Mesures jour 4
 │   ├── fr-2025-d-lcsqa-ineris-20251209.xls     # Métadonnées des stations
 │   └── README.md
 ├── notebooks/
 │   └── analyse_qualite_air.ipynb               # Notebook principal d'analyse
-├── src/                                         # Code source Python réutilisable
-├── tests/                                       # Tests unitaires
 ├── Dockerfile
 ├── docker-compose.yml
 ├── requirements.txt
