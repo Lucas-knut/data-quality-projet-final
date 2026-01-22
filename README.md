@@ -8,9 +8,10 @@ Ce projet applique une démarche complète de qualité des données sur les mesu
 
 **Données analysées :**
 - Source : ATMO Grand Est (organisme agréé de surveillance)
+- Plateforme : https://www.data.gouv.fr/datasets/donnees-temps-reel-de-mesure-des-concentrations-de-polluants-atmospheriques-reglementes-1
 - Contenu : Mesures horaires de 9 polluants (PM10, PM2.5, NO2, O3, SO2, CO, etc.)
-- Période : Janvier 2025
-- Volume : 49 968 mesures, 503 stations
+- Période : Janvier 2025 (4 jours)
+- Volume : ~200 000 mesures, 503 stations
 - Format : CSV (mesures) + XLS (métadonnées stations avec GPS)
 
 ## Structure du projet
