@@ -1,162 +1,275 @@
-# Projet Final - Qualité des Données - EPSI
+# Projet Qualité des Données - Analyse de la Qualité de l'Air
 
-Infrastructure Docker pour le projet final de qualité des données (groupe 4-5 personnes).
+## Description
+
+Ce projet applique une démarche complète de qualité des données sur les mesures de pollution atmosphérique fournies par ATMO Grand Est. L'objectif est de garantir la fiabilité des données pour une application mobile d'alerte pollution destinée aux populations sensibles.
+
+**Problématique :** Comment garantir la fiabilité des données de qualité de l'air pour alerter efficacement les populations sensibles lors des épisodes de pollution ?
+
+**Données analysées :**
+- Source : ATMO Grand Est (organisme agréé de surveillance)
+- Contenu : Mesures horaires de 9 polluants (PM10, PM2.5, NO2, O3, SO2, CO, etc.)
+- Période : Janvier 2025
+- Volume : 49 968 mesures, 503 stations
+- Format : CSV (mesures) + XLS (métadonnées stations avec GPS)
 
 ## Structure du projet
 
 ```
 data_quality/
-├── data/                    # Données brutes et traitées
-│   └── dataset.csv          # Dataset à analyser (à ajouter)
-├── notebooks/               # Notebooks Jupyter pour l'analyse
-│   └── projet_qualite_donnees.ipynb    # Notebook principal
-├── src/                     # Code source Python réutilisable
-│   ├── __init__.py
-│   ├── data_cleaning.py
-│   └── quality_validation.py
-├── tests/                   # Tests unitaires (pytest)
-├── Dockerfile              # Configuration Docker
-├── docker-compose.yml      # Orchestration Docker
-├── requirements.txt        # Dépendances Python
-└── README.md              # Ce fichier
+├── data/
+│   ├── FR_E2_2025-01-01.csv                    # Mesures de qualité de l'air
+│   ├── fr-2025-d-lcsqa-ineris-20251209.xls     # Métadonnées des stations
+│   └── README.md
+├── notebooks/
+│   └── analyse_qualite_air.ipynb               # Notebook principal d'analyse
+├── src/                                         # Code source Python réutilisable
+├── tests/                                       # Tests unitaires
+├── Dockerfile
+├── docker-compose.yml
+├── requirements.txt
+└── README.md
 ```
 
-## Démarrage rapide avec Docker
+## Prérequis
 
-### Prérequis
+- Docker Desktop installé et démarré
+- Git (optionnel, pour cloner le projet)
+- VS Code avec extension Python (optionnel, pour édition locale)
 
-- Docker installé sur votre machine
-- Docker Compose installé
+## Démarrage rapide
 
-### Lancer le projet
+### 1. Lancer l'environnement Docker
 
-1. **Cloner ou se placer dans le répertoire du projet**
-   ```bash
-   cd /Users/lucassteichen/Dev/epsi/data_quality
-   ```
-
-2. **Placer votre dataset dans le dossier `data/`**
-   ```bash
-   # Exemple : dataset.csv, dataset.parquet, etc.
-   ```
-
-3. **Construire et lancer le conteneur Docker**
-   ```bash
-   docker-compose up --build
-   ```
-
-4. **Accéder à Jupyter Lab**
-   - Ouvrir votre navigateur à l'adresse : http://localhost:8888
-   - Aucun token requis (désactivé pour le développement local)
-
-5. **Arrêter le conteneur**
-   ```bash
-   docker-compose down
-   ```
-
-### Commandes utiles
-
-**Reconstruire l'image après modification du requirements.txt :**
 ```bash
-docker-compose build
+# Se placer dans le répertoire du projet
+cd data_quality
+
+# Démarrer le conteneur Jupyter Lab
+docker-compose up -d
+
+# Vérifier que le conteneur est bien lancé
+docker ps
 ```
 
-**Exécuter un notebook en ligne de commande :**
+Le serveur Jupyter Lab est accessible à l'adresse : http://localhost:8888
+
+Note : Aucun token n'est requis pour cette configuration de développement.
+
+### 2. Consulter le notebook d'analyse
+
+Ouvrir dans votre navigateur :
+- URL : http://localhost:8888
+- Naviguer vers : `notebooks/analyse_qualite_air.ipynb`
+
+Le notebook contient 6 sections :
+1. Contexte métier et problématique
+2. Profiling : analyse exploratoire
+3. Règles de qualité (complétude, validité, unicité, cohérence)
+4. Traitement : application des règles de nettoyage
+5. Monitoring : indicateurs de qualité (KQI)
+6. Conclusion et réponse à la problématique
+
+### 3. Arrêter l'environnement
+
 ```bash
-docker-compose exec jupyter jupyter nbconvert --to notebook --execute notebooks/projet_qualite_donnees.ipynb
+docker-compose down
 ```
 
-**Accéder au shell du conteneur :**
-```bash
-docker-compose exec jupyter bash
-```
+## Utilisation avec VS Code
 
-**Exécuter les tests :**
-```bash
-docker-compose exec jupyter pytest tests/
-```
+VS Code peut être configuré pour utiliser directement le kernel Jupyter du conteneur Docker.
 
-## Objectif du projet
+### Configuration VS Code
 
-Appliquer une démarche complète de qualité des données sur un dataset de votre choix dans un contexte réaliste.
+1. **Installer l'extension Jupyter**
+   - Ouvrir VS Code
+   - Extensions (Cmd+Shift+X / Ctrl+Shift+X)
+   - Rechercher et installer "Jupyter" (Microsoft)
 
-### Attendus
-- Définir un **contexte métier** et une **problématique claire**
-- Réaliser un **profiling** et identifier les problèmes de qualité
-- Définir des **règles de qualité** avec des seuils mesurables
-- Implémenter les **traitements** (correction, exclusion, enrichissement)
-- Mettre en place un **monitoring** de la qualité avec indicateurs
-- Conclure par une **réponse claire** à la problématique
+2. **Ouvrir le notebook dans VS Code**
+   - Ouvrir le dossier du projet dans VS Code
+   - Ouvrir `notebooks/analyse_qualite_air.ipynb`
 
-### Livrables
-- **Présentation** : slides synthétiques
-- **Notebook/code** : analyse complète et documentée → [projet_qualite_donnees.ipynb](notebooks/projet_qualite_donnees.ipynb)
-- **Données préparées** : dataset nettoyé + métadonnées
-- **Reproductibilité** : environnement Docker (déjà configuré !)
+3. **Sélectionner le kernel du conteneur Docker**
+   - Cliquer sur "Select Kernel" en haut à droite du notebook
+   - Choisir "Existing Jupyter Server"
+   - Entrer l'URL : `http://localhost:8888`
+   - Laisser le champ token vide et valider
 
-### Organisation
-- **Groupe** : 4-5 personnes
-- **Sujet** : libre (pas OpenFoodFacts)
-- **Dataset** : au choix (voir suggestions ci-dessous)
+4. **Exécuter les cellules**
+   - Les cellules s'exécuteront dans le conteneur Docker
+   - Les modifications sont automatiquement synchronisées
 
-## Suggestions de datasets
+### Avantages de cette configuration
 
-Choisissez un dataset avec des problèmes de qualité réels :
+- Pas d'installation Python locale requise
+- Environnement isolé et reproductible
+- Dépendances gérées par Docker (pandas, numpy, matplotlib, xlrd, openpyxl, etc.)
+- Édition dans VS Code avec intellisense et autocomplétion
+- Exécution dans le conteneur Docker
 
-**Santé :**
-- Vaccinations COVID, hospitalisations
+## Démarche qualité appliquée
 
-**Transport :**
-- Accidents routiers, Vélib/vélos partagés
+Le projet suit une méthodologie rigoureuse en 5 étapes :
 
-**Immobilier :**
-- DVF (ventes immobilières), Airbnb
+### 1. Profiling
+Analyse exploratoire complète :
+- Statistiques descriptives par polluant
+- Détection des valeurs manquantes (4.07%)
+- Identification des valeurs invalides (2.2% de valeurs négatives)
+- Détection des doublons (0.34%)
+- Analyse de cohérence temporelle
 
-**Environnement :**
-- Qualité de l'air, stations météo
+### 2. Définition des règles
+4 dimensions de qualité avec seuils mesurables :
+- Complétude : colonnes obligatoires renseignées
+- Validité : valeurs dans limites physiques (0-500 µg/m³ selon polluant)
+- Unicité : pas de doublons (date/station/polluant)
+- Cohérence : dates logiques, durées correctes
 
-**Finance :**
-- Transactions, crypto-monnaies
+### 3. Traitement
+Pipeline de nettoyage en 5 étapes :
+- Exclusion des valeurs manquantes
+- Exclusion des valeurs hors limites physiques
+- Dédoublonnage systématique
+- Conversion des dates en datetime
+- Enrichissement avec métadonnées GPS (868 stations)
 
-**Autres :**
-- Données publiques (data.gouv.fr)
-- Kaggle datasets
-- APIs ouvertes (Twitter, GitHub, etc.)
+### 4. Monitoring
+Indicateurs clés de qualité (KQI) :
+- Taux de complétude : 100%
+- Taux de validité : 100%
+- Taux d'unicité : 100%
+- Taux de conservation : 94%
+- Score global : 98.5/100
 
-## Éléments du projet
+### 5. Conclusion
+- 0 valeur négative restante
+- 0 doublon restant
+- 503 stations enrichies avec GPS et type de zone
+- Dataset prêt pour production
 
-### Obligatoires
-- Environnement Python isolé (Docker)
-- Fichier `requirements.txt`
-- Fichier `README.md`
-- Structuration du projet (src/ data/ ...)
+## Résultats obtenus
 
-### Bonus valorisés
-- Versionnement avec git (commits réguliers)
-- Tests automatisés (pytest)
-- Journalisation des traitements (logging)
-- Justification des décisions de traitement
+### Critères de succès atteints
+
+| Critère | Objectif | Résultat | Statut |
+|---------|----------|----------|---------|
+| Valeurs impossibles | 0% | 0% | Atteint |
+| Complétude | > 95% | 100% | Atteint |
+| Outliers non justifiés | < 1% | 0% | Atteint |
+| Exploitabilité IQA | Oui | Oui | Atteint |
+
+### Enrichissement géographique
+
+- 503 stations de mesure validées
+- 3 colonnes ajoutées : latitude, longitude, type_zone
+- 100% de taux de remplissage
+- Permet analyses géospatiales et alertes par zone
 
 ## Technologies utilisées
 
-- **Python 3.11**
-- **Pandas** : manipulation de données
-- **Great Expectations** : audit de qualité
-- **Jupyter Lab** : notebooks interactifs
-- **PyArrow** : lecture de fichiers Parquet
-- **Pytest** : tests unitaires
-- **Docker** : conteneurisation
+- Python 3.11
+- Pandas 2.0+ : manipulation de données
+- NumPy : calculs numériques
+- Matplotlib / Seaborn : visualisations
+- xlrd / openpyxl : lecture fichiers Excel
+- Jupyter Lab : notebooks interactifs
+- Docker : conteneurisation
+- Great Expectations : framework qualité (prévu)
 
-## Notes
+## Commandes utiles
 
-- Le projet est complètement isolé dans Docker, aucune installation locale de Python n'est requise
-- Les modifications des notebooks et du code sont automatiquement synchronisées grâce aux volumes Docker
-- Pour un environnement de production, il faudrait sécuriser l'accès à Jupyter Lab avec un token
+### Gestion du conteneur
+
+```bash
+# Démarrer le conteneur
+docker-compose up -d
+
+# Voir les logs
+docker-compose logs -f
+
+# Arrêter le conteneur
+docker-compose down
+
+# Reconstruire l'image (après modification requirements.txt)
+docker-compose build
+```
+
+### Exécution dans le conteneur
+
+```bash
+# Accéder au shell du conteneur
+docker exec -it data_quality_jupyter bash
+
+# Installer un package Python
+docker exec data_quality_jupyter pip install nom_package
+
+# Lister les packages installés
+docker exec data_quality_jupyter pip list
+
+# Exécuter un script Python
+docker exec data_quality_jupyter python /app/src/script.py
+```
+
+### Gestion des notebooks
+
+```bash
+# Exécuter un notebook en ligne de commande
+docker exec data_quality_jupyter jupyter nbconvert --to notebook --execute /app/notebooks/analyse_qualite_air.ipynb
+
+# Convertir notebook en HTML
+docker exec data_quality_jupyter jupyter nbconvert --to html /app/notebooks/analyse_qualite_air.ipynb
+```
+
+## Architecture technique
+
+### Isolation par conteneur
+
+- Image : Python 3.11-slim
+- Pas d'installation locale requise
+- Dépendances figées dans requirements.txt
+- Environnement reproductible
+
+### Volumes Docker
+
+```yaml
+volumes:
+  - ./data:/app/data           # Données partagées
+  - ./notebooks:/app/notebooks # Notebooks synchronisés
+  - ./src:/app/src             # Code source
+  - ./tests:/app/tests         # Tests
+```
+
+Les modifications de fichiers sont automatiquement synchronisées entre l'hôte et le conteneur.
+
+### Ports exposés
+
+- Port 8888 : Jupyter Lab (http://localhost:8888)
+
+## Points d'attention
+
+### Sécurité
+
+- Token Jupyter désactivé (développement local uniquement)
+- En production : activer l'authentification par token
+- Ne pas exposer le port 8888 publiquement
+
+### Performance
+
+- Chargement multi-fichiers automatique (glob pattern)
+- Support de fichiers multiples via `FR_E2_*.csv`
+- Enrichissement optimisé avec pandas merge
+
+### Extensibilité
+
+- Architecture modulaire (profiling / règles / traitement / monitoring)
+- Pipeline reproductible et automatisable
+- Prêt pour intégration CI/CD
 
 ## Auteur
 
-Lucas Steichen - EPSI
-
-## Date
-
-Janvier 2026
+Lucas Steichen
+Projet final - Qualité des Données
+EPSI - Janvier 2026
